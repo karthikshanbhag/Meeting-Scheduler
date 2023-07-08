@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#6523B1">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="10sp"
+        android:text="Meeting Details"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+        <android.widget.ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#6523B1"
+            android:src="@drawable/ic_baseline_group_add_24"
+            android:layout_alignParentEnd="true"
+            android:padding="10sp"
+            android:onClick="add"
+            />
+
+        <android.widget.ImageButton
+            android:id="@+id/rm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="40sp"
+            android:background="#6523B1"
+            android:padding="10sp"
+            android:src="@drawable/ic_baseline_person_remove_24" />
+    </RelativeLayout>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#05A384"
+        android:textColor="@color/black"
+        />
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

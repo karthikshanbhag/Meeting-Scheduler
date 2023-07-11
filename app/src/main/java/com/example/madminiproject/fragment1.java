@@ -58,7 +58,7 @@ public class fragment1 extends Fragment {
     int mY = c.get(Calendar.YEAR);
     int mM = c.get(Calendar.MONTH);
     int mD = c.get(Calendar.DAY_OF_MONTH);
-
+    String mytime;
     // Alarm reminder variables
     private AlarmManager alarmManager;
     private PendingIntent alarmIntent;
@@ -93,7 +93,7 @@ public class fragment1 extends Fragment {
         //PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
         // Initialize alarm manager and alarm intent
         alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmIntent = PendingIntent.getBroadcast(getContext(), 0, new Intent(getContext(), AlarmReceiver.class), 0);
+        //alarmIntent = PendingIntent.getBroadcast(getContext(), 0, new Intent(getContext(), AlarmReceiver.class), 0);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,8 +216,13 @@ public class fragment1 extends Fragment {
                 if (hour == 0) hour = 12;
                 String _AM_PM = (h > 12) ? "PM" : "AM";
                 time.setText(String.format(Locale.getDefault(), "%02d:%02d %s", hour, m, _AM_PM));
+                if(m>=10)
+                mytime=String.format(Locale.getDefault(), "%02d:%02d %s", hour, m-10, _AM_PM);
+               else
+                    mytime=String.format(Locale.getDefault(), "%02d:%02d %s", hour-1, 60-(10-m), _AM_PM);
+
             }
-        }, Calendar.HOUR_OF_DAY, Calendar.MINUTE, false);
+        }, 00, 00, false);
         tm.show();
     }
 
@@ -237,10 +242,22 @@ public class fragment1 extends Fragment {
 
     // Inside the scheduleAlarmReminder method
     private void scheduleAlarmReminder(String mdate, String mTime, String mAgenda) {
-        long alarmTimeMillis = convertDateTimeToMillis(mdate, mTime);
+        agenda.setText(mytime);
+        long alarmTimeMillis = convertDateTimeToMillis(mdate, mytime);
         Intent intent = new Intent(getContext(), AlarmReceiver.class);
-        intent.putExtra("agenda", mAgenda); // Add agenda as extra data
-        alarmIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        intent.putExtra("agenda", mAgenda);
+        intent.putExtra("time", mTime);
+        // Add agenda as extra data
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            flags |= PendingIntent.FLAG_MUTABLE;
+        }
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, flags);
+        int flags1 = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            flags1 |= PendingIntent.FLAG_MUTABLE;
+        }
+        alarmIntent = PendingIntent.getBroadcast(getContext(), 0, intent, flags1);
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeMillis, alarmIntent);
         Toast.makeText(getActivity(), "Alarm reminder set for the meeting", Toast.LENGTH_SHORT).show();
     }
